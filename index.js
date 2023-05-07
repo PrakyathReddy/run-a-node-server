@@ -1,30 +1,19 @@
 const http = require("http");
-
-const HTML = `
-<!DOCTYPE html>
-<html lang="en">  
-  <head>      
-    <meta charset="utf-8">
-    <title>My Hello World</title>
-    <style>
-      body {
-        background-color: black;
-        color: yellow;
-        text-align: center;
-        font-size: 40px;
-      }
-    </style>
-  </head>
-  <body>
-    Hello World
-  </body>
-</html>
-`;
+const fs = require("fs");
+const path = require("path");
 
 const server = http.createServer(function (request, response) {
-  response.statusCode = 200;
-  response.setHeader("Content-Type", "text/html");
-  response.end(HTML);
+  if (request.url === "/style.css") {
+    // Serve the CSS file
+    const css = fs.readFileSync("./style.css", "utf8");
+    response.setHeader("Content-Type", "text/css");
+    response.end(css);
+  } else {
+    // Serve the HTML file
+    const html = fs.readFileSync("./index.html", "utf8");
+    response.setHeader("Content-Type", "text/html");
+    response.end(html);
+  }
 });
 
 server.listen({ port: 3000, host: "localhost" }, function () {
